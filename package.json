@@ -1,0 +1,31 @@
+{
+  "private": true,
+  "name": "mapillary-ottawa",
+  "version": "0.1.0",
+  "description": "Mapillary Images & Sequences for the City of Ottawa.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js 'extents/ottawa-gatineau.geojson'",
+    "git-commit": "git add -A && git commit -m 'Update Mapillary Ottawa data' && git push"
+  },
+  "author": "Denis Carriere <@DenisCarriere>",
+  "license": "MIT",
+  "dependencies": {
+    "@turf/helpers": "^4.1.0",
+    "axios": "^0.16.1",
+    "global-mercator": "^2.7.0",
+    "load-json-file": "^2.0.0",
+    "lodash.range": "^3.2.0",
+    "meow": "^3.7.0",
+    "mkdirp": "^0.5.1",
+    "pbf": "^3.0.5",
+    "progress": "^2.0.0",
+    "slippy-grid": "^2.1.1",
+    "slippy-tile": "^2.1.0",
+    "vector-tile": "^1.3.0",
+    "write-json-file": "^2.0.0"
+  },
+  "devDependencies": {
+    "standard": "^10.0.2"
+  }
+}
