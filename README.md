@@ -23,3 +23,18 @@ All Mapillary data has already been converted to GeoJSON and are stored in this 
 
 - `/images/{z}/{x}/{y}.geojson`
 - `/sequences/{z}/{x}/{y}.geojson`
+
+## Updates
+
+Updates will be done weekly or daily (not implemented yet).
+
+### Manual Update
+
+```
+$ rm -r images/
+$ rm -r sequences/
+$ npm start
+$ git add -A
+$ git commit -m 'Weekly Ottawa Mapillary update'
+$ git push
+```
