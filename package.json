@@ -12,7 +12,9 @@
   "license": "MIT",
   "dependencies": {
     "@turf/helpers": "^4.1.0",
+    "@turf/meta": "^4.1.0",
     "axios": "^0.16.1",
+    "glob": "^7.1.1",
     "global-mercator": "^2.7.0",
     "load-json-file": "^2.0.0",
     "lodash.range": "^3.2.0",

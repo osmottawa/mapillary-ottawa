@@ -3,6 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const load = require('load-json-file')
 const meow = require('meow')
+const glob = require('glob')
 const range = require('lodash.range')
 const write = require('write-json-file')
 const axios = require('axios')
@@ -13,6 +14,7 @@ const slippyGrid = require('slippy-grid')
 const slippyTile = require('slippy-tile')
 const {VectorTile} = require('vector-tile')
 const {featureCollection} = require('@turf/helpers')
+const {featureEach} = require('@turf/meta')
 const ProgressBar = require('progress')
 
 const cli = meow(`
@@ -50,14 +52,18 @@ async function main () {
     if (done) break
     bar.tick()
     const tile = mercator.tileToGoogle(value)
-    const data = await requestVectorTile(tile)
+    const [x, y, z] = tile.map(v => String(v))
+
+    // Only download tiles that don't exist
+    let data
+    if (!fs.existsSync(path.join('images', z, x, y + '.geojson'))) {
+      data = await requestVectorTile(tile)
+    }
 
     // Store Results
     if (data) {
       const images = vectorTileToGeoJSON(data, 'mapillary-images', tile)
       const sequences = vectorTileToGeoJSON(data, 'mapillary-sequences', tile)
-
-      const [x, y, z] = tile.map(v => String(v))
 
       // Save Images
       mkdirp(path.join(__dirname, 'images', z, x), () => {
@@ -69,8 +75,30 @@ async function main () {
       })
     }
   }
+  // Group all GeoJSON tiles to single file
+  const images = folderToGeoJSON('images/**/*.geojson')
+  write.sync('images.geojson', images)
+
+  const sequences = folderToGeoJSON('sequences/**/*.geojson')
+  write.sync('sequences.geojson', sequences)
 }
 main()
+
+/**
+ * Parse Folder to GeoJSON
+ *
+ * @param {string} pattern
+ * @return {FeatureCollection} GeoJSON FeatureCollection
+ */
+function folderToGeoJSON (pattern) {
+  const results = featureCollection([])
+  const files = glob.sync(pattern)
+  files.forEach(file => {
+    const geojson = load.sync(file)
+    featureEach(geojson, feature => results.features.push(feature))
+  })
+  return results
+}
 
 /**
  * Request VectorTile
