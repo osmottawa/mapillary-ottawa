@@ -1,12 +1,14 @@
-# Mapillary Ottawa
+# Mapillary Data - Ottawa/Gatineau
 
-Mapillary Images & Sequences for the City of Ottawa.
+Pre-processed Mapillary **Images** & **Sequences** for the City of Ottawa & Gatineau.
 
 Before using this data, one must agree with the [Terms and Conditions](https://www.mapillary.com/terms) of Mapillary.
 
+![image](https://cloud.githubusercontent.com/assets/550895/25558392/c510fe7c-2cf3-11e7-9f07-0abf51c870e9.png)
+
 ## Usage
 
-All Mapillary data has already been converted to GeoJSON and are stored in this GitHub repo.
+All Mapillary Images & Sequences have already been converted to GeoJSON and are currently being stored on Amazon's S3 buckets.
 
 ### Full GeoJSON
 
