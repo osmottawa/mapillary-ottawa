@@ -10,9 +10,16 @@ Before using this data, one must agree with the [Terms and Conditions](https://w
 $ npm install
 ```
 
-## Updates
+## Usage
 
-```bash
-$ npm start
-$ npm run git-commit
-```
+All Mapillary data has already been converted to GeoJSON and are stored in this GitHub repo.
+
+## Full GeoJSON
+
+- `/images.geojson`
+- `/sequences.geojson`
+
+### Tiled GeoJSON
+
+- `/images/{z}/{x}/{y}.geojson`
+- `/sequences/{z}/{x}/{y}.geojson`
