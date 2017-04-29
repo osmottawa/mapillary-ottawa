@@ -30,7 +30,7 @@ Updates will be done weekly or daily (not implemented yet).
 
 ### Manual Update
 
-```
+```bash
 $ rm -r images/
 $ rm -r sequences/
 $ npm start
