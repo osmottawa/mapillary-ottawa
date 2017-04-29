@@ -10,13 +10,13 @@ All Mapillary data has already been converted to GeoJSON and are stored in this 
 
 ### Full GeoJSON
 
-- [`/data/images.geojson`](https://github.com/osmottawa/mapillary-ottawa/blob/master/data/images.geojson)
-- [`/data/sequences.geojson`](https://github.com/osmottawa/mapillary-ottawa/blob/master/data/sequences.geojson)
+- [`s3://mapillary/ottawa-gatineau/images.geojson`](https://s3.amazonaws.com/mapillary/ottawa-gatineau/images.geojson)
+- [`s3://mapillary/ottawa-gatineau/sequences.geojson`](https://s3.amazonaws.com/mapillary/ottawa-gatineau/sequences.geojson)
 
 ### Tiled GeoJSON
 
-- `/images/{z}/{x}/{y}.geojson`
-- `/sequences/{z}/{x}/{y}.geojson`
+- `s3://mapillary/ottawa-gatineau/images/{z}/{x}/{y}.geojson`
+- `s3://mapillary/ottawa-gatineau/sequences/{z}/{x}/{y}.geojson`
 
 ## Updates
 
@@ -26,10 +26,6 @@ Updates will be done weekly or daily (not implemented yet).
 
 ```bash
 $ npm install
-$ rm -r "images/"
-$ rm -r "sequences/"
 $ npm start
-$ git add -A
-$ git commit -m "Weekly Ottawa Mapillary update"
-$ git push
+$ npm run upload-s3
 ```

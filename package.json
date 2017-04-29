@@ -6,9 +6,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js 'extents/ottawa-gatineau.geojson'",
-    "update": "rm -r images && rm -r sequences && npm run start && npm run git-commit && npm run upload-s3",
-    "upload-s3": "aws s3 cp data s3://mapillary/ottawa-gatineau --recursive --acl public-read",
-    "git-commit": "git add -A && git commit -m 'Update Mapillary Ottawa data' && git push"
+    "restart": "rm -r upload && npm run start",
+    "upload-s3": "aws s3 cp upload s3://mapillary/ottawa-gatineau --recursive --acl public-read"
   },
   "author": "Denis Carriere <@DenisCarriere>",
   "license": "MIT",

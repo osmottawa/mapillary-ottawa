@@ -56,7 +56,7 @@ async function main () {
 
     // Only download tiles that don't exist
     let data
-    if (!fs.existsSync(path.join('images', z, x, y + '.geojson'))) {
+    if (!fs.existsSync(path.join('upload', 'images', z, x, y + '.geojson'))) {
       data = await requestVectorTile(tile)
     }
 
@@ -66,21 +66,22 @@ async function main () {
       const sequences = vectorTileToGeoJSON(data, 'mapillary-sequences', tile)
 
       // Save Images
-      mkdirp(path.join(__dirname, 'images', z, x), () => {
-        write.sync(path.join(__dirname, 'images', z, x, y + '.geojson'), images)
+      mkdirp(path.join(__dirname, 'upload', 'images', z, x), () => {
+        write.sync(path.join(__dirname, 'upload', 'images', z, x, y + '.geojson'), images)
       })
+
       // Save Sequences
-      mkdirp(path.join(__dirname, 'sequences', z, x), () => {
-        write.sync(path.join(__dirname, 'sequences', z, x, y + '.geojson'), sequences)
+      mkdirp(path.join(__dirname, 'upload', 'sequences', z, x), () => {
+        write.sync(path.join(__dirname, 'upload', 'sequences', z, x, y + '.geojson'), sequences)
       })
     }
   }
   // Group all GeoJSON tiles to single file
-  const images = folderToGeoJSON('images/**/*.geojson')
-  write.sync('data/images.geojson', images)
+  const images = folderToGeoJSON(path.join('upload', 'images', '**', '*.geojson'))
+  write.sync(path.join(__dirname, 'upload', 'images.geojson'), images)
 
-  const sequences = folderToGeoJSON('sequences/**/*.geojson')
-  write.sync('data/sequences.geojson', sequences)
+  const sequences = folderToGeoJSON(path.join('upload', 'sequences', '**', '*.geojson'))
+  write.sync(path.join(__dirname, 'upload', 'sequences.geojson'), sequences)
 }
 main()
 
