@@ -1,3 +1,8 @@
+# Large data
+data
+images
+sequences
+
 # Logs
 logs
 *.log
