@@ -77,10 +77,10 @@ async function main () {
   }
   // Group all GeoJSON tiles to single file
   const images = folderToGeoJSON('images/**/*.geojson')
-  write.sync('images.geojson', images)
+  write.sync('data/images.geojson', images)
 
   const sequences = folderToGeoJSON('sequences/**/*.geojson')
-  write.sync('sequences.geojson', sequences)
+  write.sync('data/sequences.geojson', sequences)
 }
 main()
 

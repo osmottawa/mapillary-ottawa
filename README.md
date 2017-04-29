@@ -16,8 +16,8 @@ All Mapillary data has already been converted to GeoJSON and are stored in this 
 
 ## Full GeoJSON
 
-- `/images.geojson`
-- `/sequences.geojson`
+- `/data/images.geojson`
+- `/data/sequences.geojson`
 
 ### Tiled GeoJSON
 
