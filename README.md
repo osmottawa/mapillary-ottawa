@@ -14,10 +14,10 @@ $ npm install
 
 All Mapillary data has already been converted to GeoJSON and are stored in this GitHub repo.
 
-## Full GeoJSON
+### Full GeoJSON
 
-- `/data/images.geojson`
-- `/data/sequences.geojson`
+- [`/data/images.geojson`](https://github.com/osmottawa/mapillary-ottawa/blob/master/data/images.geojson)
+- [`/data/sequences.geojson`](https://github.com/osmottawa/mapillary-ottawa/blob/master/data/sequences.geojson)
 
 ### Tiled GeoJSON
 
