@@ -12,10 +12,10 @@ const Protobuf = require('pbf')
 const mercator = require('global-mercator')
 const slippyGrid = require('slippy-grid')
 const slippyTile = require('slippy-tile')
-const {VectorTile} = require('vector-tile')
-const {featureCollection} = require('@turf/helpers')
-const {featureEach} = require('@turf/meta')
 const ProgressBar = require('progress')
+const {VectorTile} = require('@mapbox/vector-tile')
+const {featureEach} = require('@turf/meta')
+const {featureCollection} = require('@turf/helpers')
 
 const cli = meow(`
     Usage:
