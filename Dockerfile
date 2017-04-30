@@ -8,6 +8,21 @@ RUN npm install -g yarn
 ADD yarn.lock /src/yarn.lock
 RUN yarn
 
+# Install AWS
+RUN apk -v --update add \
+        python \
+        py-pip \
+        groff \
+        less \
+        mailcap \
+        && \
+    pip install --upgrade awscli s3cmd python-magic && \
+    apk -v --purge del py-pip && \
+    rm /var/cache/apk/*
+
+VOLUME /root/.aws
+ADD extents/ /src/extents
+ADD index.js /src/index.js
+
 # Run App
-ADD . /src
 CMD npm start && npm run upload-s3

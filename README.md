@@ -24,10 +24,21 @@ All Mapillary Images & Sequences have already been converted to GeoJSON and are 
 
 Updates will be done weekly or daily (not implemented yet).
 
-### Manual Update
+### Manual Updates
 
 ```bash
 $ npm install
 $ npm start
 $ npm run upload-s3
 ```
+
+### Docker Updates
+
+```bash
+$ docker build -t mapillary-ottawa .
+$ docker run --rm -it \
+  -v upload:/src/upload \
+  -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+  -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+  -e "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" \
+  mapillary-ottawa
