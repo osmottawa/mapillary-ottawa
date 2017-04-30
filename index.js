@@ -47,7 +47,7 @@ async function main () {
   })
 
   // Iterate over each tile
-  const queue = d3.queue(10)
+  const queue = d3.queue(25)
   const grid = slippyGrid.single(geojson, 14, 14)
 
   while (true) {
@@ -85,29 +85,36 @@ async function main () {
   }
   queue.awaitAll(() => {
     // Group all GeoJSON tiles to single file
-    const images = folderToGeoJSON(path.join('upload', 'images', '**', '*.geojson'))
-    write.sync(path.join(__dirname, 'upload', 'images.geojson'), images)
-
-    const sequences = folderToGeoJSON(path.join('upload', 'sequences', '**', '*.geojson'))
-    write.sync(path.join(__dirname, 'upload', 'sequences.geojson'), sequences)
+    const directory = path.join(__dirname, 'upload') + path.sep
+    writeStreamToGeoJSON(path.join(directory, 'images', '**', '*.geojson'), directory + 'images.geojson')
+    writeStreamToGeoJSON(path.join(directory, 'sequences', '**', '*.geojson'), directory + 'sequences.geojson')
   })
 }
 main()
 
 /**
- * Parse Folder to GeoJSON
+ * Write Stream from folder to GeoJSON
  *
  * @param {string} pattern
- * @return {FeatureCollection} GeoJSON FeatureCollection
+ * @param {string} output
+ * @return {void}
  */
-function folderToGeoJSON (pattern) {
-  const results = featureCollection([])
+function writeStreamToGeoJSON (pattern, output) {
+  const writer = fs.createWriteStream(output)
+  writer.write('{\n')
+  writer.write('"type": "FeatureCollection",\n')
+  writer.write('"features": [\n')
   const files = glob.sync(pattern)
-  files.forEach(file => {
+  files.forEach((file, index) => {
     const geojson = load.sync(file)
-    featureEach(geojson, feature => results.features.push(feature))
+    featureEach(geojson, (feature, featureIndex) => {
+      writer.write(JSON.stringify(feature))
+      if (index !== files.length - 1 || featureIndex !== geojson.features.length - 1) {
+        writer.write(',\n')
+      }
+    })
   })
-  return results
+  writer.end('\n]\n}')
 }
 
 /**

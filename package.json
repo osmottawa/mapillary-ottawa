@@ -6,7 +6,6 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js 'extents/ottawa-gatineau.geojson'",
-    "restart": "rm -rf upload && npm run start",
     "upload-s3": "aws s3 cp upload s3://mapillary/ottawa-gatineau --recursive --acl public-read"
   },
   "author": "Denis Carriere <@DenisCarriere>",

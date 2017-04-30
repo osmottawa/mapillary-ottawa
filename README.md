@@ -37,6 +37,7 @@ $ npm run upload-s3
 ```bash
 $ docker build -t mapillary-ottawa .
 $ docker run --rm -it \
+  -v upload:/src/upload
   -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
   -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
   -e "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" \
