@@ -4,6 +4,7 @@ const d3 = require('d3-queue')
 const path = require('path')
 const load = require('load-json-file')
 const meow = require('meow')
+const glob = require('glob')
 const range = require('lodash.range')
 const write = require('write-json-file')
 const axios = require('axios')
@@ -85,8 +86,8 @@ async function main () {
   queue.awaitAll(() => {
     // Group all GeoJSON tiles to single file
     const directory = path.join(__dirname, 'upload') + path.sep
-    writeStreamToGeoJSON(directory + 'images', directory + 'images.geojson')
-    writeStreamToGeoJSON(directory + 'sequences', directory + 'sequences.geojson')
+    writeStreamToGeoJSON(path.join(directory + 'images', '**', '*.geojson'), directory + 'images.geojson')
+    writeStreamToGeoJSON(path.join(directory + 'sequences', '**', '*.geojson'), directory + 'sequences.geojson')
   })
 }
 main()
@@ -94,24 +95,17 @@ main()
 /**
  * Write Stream from folder to GeoJSON
  *
- * @param {string} folder
+ * @param {string} pattern
  * @param {string} output
  * @return {void}
  */
-function writeStreamToGeoJSON (folder, output) {
+function writeStreamToGeoJSON (pattern, output) {
   const writer = fs.createWriteStream(output)
   writer.write('{\n')
   writer.write('"type": "FeatureCollection",\n')
   writer.write('"features": [\n')
-  const files = []
-  for (const z of fs.readdirSync(folder)) {
-    for (const x of fs.readdirSync(path.join(folder, z))) {
-      for (const y of fs.readdirSync(path.join(folder, z, x))) {
-        files.push(path.join(folder, z, x, y))
-      }
-    }
-  }
-  const bar = new ProgressBar(`  ${path.parse(output).base} [:bar] :percent (:current/:total)`, {
+  const files = glob.sync(pattern)
+  const bar = new ProgressBar(`  saving ${path.parse(output).name} [:bar] :percent (:current/:total)`, {
     total: files.length,
     width: 20
   })
