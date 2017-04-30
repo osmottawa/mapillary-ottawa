@@ -47,7 +47,7 @@ async function main () {
   })
 
   // Iterate over each tile
-  const queue = d3.queue(25)
+  const queue = d3.queue(10)
   const grid = slippyGrid.single(geojson, 14, 14)
 
   while (true) {
