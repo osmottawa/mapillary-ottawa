@@ -105,6 +105,10 @@ function writeStreamToGeoJSON (pattern, output) {
   writer.write('"type": "FeatureCollection",\n')
   writer.write('"features": [\n')
   const files = glob.sync(pattern)
+  const bar = new ProgressBar(`  ${path.parse(output).base} [:bar] :percent (:current/:total)`, {
+    total: files.length,
+    width: 20
+  })
   files.forEach((file, index) => {
     const geojson = load.sync(file)
     featureEach(geojson, (feature, featureIndex) => {
@@ -113,6 +117,7 @@ function writeStreamToGeoJSON (pattern, output) {
         writer.write(',\n')
       }
     })
+    bar.tick()
   })
   writer.end('\n]\n}')
 }
