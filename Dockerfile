@@ -25,4 +25,4 @@ ADD extents/ /src/extents
 ADD index.js /src/index.js
 
 # Run App
-CMD npm start && npm run upload-s3
+CMD npm restart && npm run upload-s3

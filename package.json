@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js 'extents/ottawa-gatineau.geojson'",
-    "restart": "rm -r upload && npm run start",
+    "restart": "rm -rf upload && npm run start",
     "upload-s3": "aws s3 cp upload s3://mapillary/ottawa-gatineau --recursive --acl public-read"
   },
   "author": "Denis Carriere <@DenisCarriere>",
@@ -16,6 +16,7 @@
     "@turf/helpers": "^4.1.0",
     "@turf/meta": "^4.1.0",
     "axios": "^0.16.1",
+    "d3-queue": "^3.0.5",
     "glob": "^7.1.1",
     "global-mercator": "^2.7.0",
     "load-json-file": "^2.0.0",

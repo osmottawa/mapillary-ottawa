@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const fs = require('fs')
+const d3 = require('d3-queue')
 const path = require('path')
 const load = require('load-json-file')
 const meow = require('meow')
@@ -46,42 +47,50 @@ async function main () {
   })
 
   // Iterate over each tile
+  const queue = d3.queue(25)
   const grid = slippyGrid.single(geojson, 14, 14)
+
   while (true) {
     const {value, done} = grid.next()
     if (done) break
-    bar.tick()
-    const tile = mercator.tileToGoogle(value)
-    const [x, y, z] = tile.map(v => String(v))
 
-    // Only download tiles that don't exist
-    let data
-    if (!fs.existsSync(path.join('upload', 'images', z, x, y + '.geojson'))) {
-      data = await requestVectorTile(tile)
-    }
+    queue.defer(async callback => {
+      bar.tick()
+      const tile = mercator.tileToGoogle(value)
+      const [x, y, z] = tile.map(v => String(v))
 
-    // Store Results
-    if (data) {
-      const images = vectorTileToGeoJSON(data, 'mapillary-images', tile)
-      const sequences = vectorTileToGeoJSON(data, 'mapillary-sequences', tile)
+      // Only download tiles that don't exist
+      let data
+      if (!fs.existsSync(path.join('upload', 'images', z, x, y + '.geojson'))) {
+        data = await requestVectorTile(tile)
+      }
 
-      // Save Images
-      mkdirp(path.join(__dirname, 'upload', 'images', z, x), () => {
-        write.sync(path.join(__dirname, 'upload', 'images', z, x, y + '.geojson'), images)
-      })
+      // Store Results
+      if (data) {
+        const images = vectorTileToGeoJSON(data, 'mapillary-images', tile)
+        const sequences = vectorTileToGeoJSON(data, 'mapillary-sequences', tile)
 
-      // Save Sequences
-      mkdirp(path.join(__dirname, 'upload', 'sequences', z, x), () => {
-        write.sync(path.join(__dirname, 'upload', 'sequences', z, x, y + '.geojson'), sequences)
-      })
-    }
+        // Save Images
+        mkdirp(path.join(__dirname, 'upload', 'images', z, x), () => {
+          write.sync(path.join(__dirname, 'upload', 'images', z, x, y + '.geojson'), images)
+        })
+
+        // Save Sequences
+        mkdirp(path.join(__dirname, 'upload', 'sequences', z, x), () => {
+          write.sync(path.join(__dirname, 'upload', 'sequences', z, x, y + '.geojson'), sequences)
+        })
+      }
+      callback(null)
+    })
   }
-  // Group all GeoJSON tiles to single file
-  const images = folderToGeoJSON(path.join('upload', 'images', '**', '*.geojson'))
-  write.sync(path.join(__dirname, 'upload', 'images.geojson'), images)
+  queue.awaitAll(() => {
+    // Group all GeoJSON tiles to single file
+    const images = folderToGeoJSON(path.join('upload', 'images', '**', '*.geojson'))
+    write.sync(path.join(__dirname, 'upload', 'images.geojson'), images)
 
-  const sequences = folderToGeoJSON(path.join('upload', 'sequences', '**', '*.geojson'))
-  write.sync(path.join(__dirname, 'upload', 'sequences.geojson'), sequences)
+    const sequences = folderToGeoJSON(path.join('upload', 'sequences', '**', '*.geojson'))
+    write.sync(path.join(__dirname, 'upload', 'sequences.geojson'), sequences)
+  })
 }
 main()
 
